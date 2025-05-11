@@ -123,3 +123,20 @@ def go(
     sb.terminate()
 
     return result["keys"]["response"]
+
+# Modal local entrypoint to run from command line
+@app.local_entrypoint()
+def main(
+    question: str = DEFAULT_QUESTION,
+    debug: bool = False,
+):
+    """
+    Sends a question to the Python code generation agent.
+
+    Debug mode: if `True`, switch to debug mode for shorter context with smaller model.
+    """
+    if debug:
+        if question == DEFAULT_QUESTION:
+            question = "hi there, how are you?"
+
+    print(go.remote(question, debug=debug))
