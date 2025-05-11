@@ -37,3 +37,30 @@ def enrich(graph):
     )
 
     return graph
+
+def decide_to_check_code_exec(state: GraphState) -> str:
+    """
+    Determines whether to test code execution, or re-try answer generation.
+
+    Args:
+        state (dict): The current graph state
+
+    Returns:
+        str: Next node to call
+    """
+
+    print("---DECIDE TO TEST CODE EXECUTION---")
+    state_dict = state["keys"]
+    error = state_dict["error"]
+
+    if error == "None":
+        # All documents have been filtered check_relvance
+        # If so, re-generate a new query
+        print("---DECISION: TEST CODE EXECUTION---")
+
+        return "check_code_execution"
+    else:
+        # Agent has relevant documents, so now generate answer
+        print("---DECISION: RE-TRY SOLUTION---")
+
+        return "generate"
