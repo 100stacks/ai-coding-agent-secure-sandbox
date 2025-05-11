@@ -14,6 +14,13 @@ app = modal.App(
 
 # create secure sandbox
 def create_sandbox(app) -> modal.Sandbox:
+    """
+    Secure Sandbox
+
+    Using Modal Sandbox construct, run arbitrary potentially unsecure code.  This
+    proof of concept uses the HF `transformers` library to generate text with a
+    pre-trained model.
+    """
     agent_image = modal.Image.debian_slim(python_version=PYTHON_VERSION).pip_install(
         "torch==2.5.0",
         "transformers==4.46.0",
@@ -29,6 +36,12 @@ def create_sandbox(app) -> modal.Sandbox:
 
 # run Python code
 def run(code: str, sb: modal.Sandbox) -> tuple[str, str]:
+    """
+    Run code in sandbox
+
+    Use Python `exec` command to run dynamically generated code without
+    spinning up a new container.
+    """
     print(
         f"{COLOR['HEADER']}📦: Running in sandbox{COLOR['ENDC']}",
         f"(COLOR['GREEN']){code}{COLOR['ENDC']}",
@@ -50,6 +63,16 @@ def run(code: str, sb: modal.Sandbox) -> tuple[str, str]:
 
 # Construct the AI agent's graph
 def construct_graph(sandbox: modal.Sandbox, debug: bool = False):
+    """
+    Construct the AI Agent's Graph
+
+    Using LangGraph, construct the agent's graph.  The graph is defined in `edges`
+    and `nodes` modules.
+
+    - `Nodes`: actions that change the state
+    - `Edges`: transitions between nodes
+    """
+
     from langgraph.graph import StateGraph
 
     from .src.common import GraphState
