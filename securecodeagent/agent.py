@@ -95,3 +95,31 @@ def construct_graph(sandbox: modal.Sandbox, debug: bool = False):
     graph.set_finish_point(key="finish")
 
     return graph
+
+# Set up and compile graph
+DEFAULT_QUESTION = """How do I generate Python code using a pre-trained model
+from the transformers library?"""
+
+@app.function()
+def go(
+    question: str = DEFAULT_QUESTION,
+    debug: bool = False,
+):
+    """
+    Compiles the Python code generation agent graph and runs it.
+
+    Returns the result.
+    """
+    sb = create_sandbox(app)
+
+    # LangChain LCEL syntax
+    graph = construct_graph(sb, debug=debug)
+    runnable = graph.compile()
+    result = runnable.invoke(
+        {"keys": {"question": question, "iterations": 0}},
+        config={"recursion_limit": 50},
+    )
+
+    sb.terminate()
+
+    return result["keys"]["response"]
