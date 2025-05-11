@@ -47,3 +47,28 @@ def run(code: str, sb: modal.Sandbox) -> tuple[str, str]:
         )
 
     return stdout, stderr
+
+# Construct the AI agent's graph
+def construct_graph(sandbox: modal.Sandbox, debug: bool = False):
+    from langgraph.graph import StateGraph
+
+    from .src.common import GraphState
+
+    # Crawl the transformers documentation to inform code generation
+    context = retrieval.retrieve_docs(debug=debug)
+
+    graph = StateGraph(GraphState)
+
+    # Attach nodes to the graph
+    graph_nodes = nodes.Nodes(context, sandbox, run, debug=dubug)
+    for key, value in graph_nodes.node_map.items():
+        graph.add_node(key, value)
+
+    # Construct the graph by adding edges
+    graph = edges.enrich(graph)
+
+    # Set the starting and ending nodes of the graph
+    graph.set_entry_point(key="generate")
+    graph.set_finish_point(key="finish")
+
+    return graph
