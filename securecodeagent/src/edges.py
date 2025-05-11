@@ -40,7 +40,7 @@ def enrich(graph):
 
 def decide_to_check_code_exec(state: GraphState) -> str:
     """
-    Determines whether to test code execution, or re-try answer generation.
+    Determines whether to test code execution, or retry answer generation.
 
     Args:
         state (dict): The current graph state
@@ -61,6 +61,36 @@ def decide_to_check_code_exec(state: GraphState) -> str:
         return "check_code_execution"
     else:
         # Agent has relevant documents, so now generate answer
-        print("---DECISION: RE-TRY SOLUTION---")
+        print("---DECISION: RETRY SOLUTION---")
 
         return "generate"
+
+def decide_to_finish(state: GraphState) -> str:
+    """
+    Determines whether to finish (limit code retry to 3 times).
+
+    Args:
+        state (dict): The current graph state
+
+    Returns:
+        str: Next node to call
+    """
+
+    print("---DECIDE TO FINISH---")
+    state_dict = state["keys"]
+    evaluation = state_dict["evaluation"]
+    iter = state_dict["iterations"]
+
+    if evaluation.decision == "finish" or iter >= 3:
+        print("---DECISION: FINISH---")
+
+        return "finish"
+    else:
+        print("---DECISION: RETRY SOLUTION---")
+
+        return "generate"
+
+EDGE_MAP: dict[str, Callable] = {
+    "decide_to_check_code_exec":  decide_to_check_code_exec,
+    "decide_to_finish": decide_to_finish,
+}
