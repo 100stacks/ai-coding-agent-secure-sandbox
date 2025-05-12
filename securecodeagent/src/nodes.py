@@ -244,3 +244,16 @@ Here is the user question:
                 "iterations": iter,
             }
         }
+
+    def check_code_execution(self, state: GraphState) -> GraphState:
+        """
+        Check code block execution
+
+        Args:
+            state (dict): The current graph state
+
+        Returns:
+            state (dict): New key added to state error
+        """
+
+        pass
