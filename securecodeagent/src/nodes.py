@@ -296,3 +296,16 @@ Here is the user question:
                 "iterations": iter,
             }
         }
+
+    def evaluate_execution(self, state: GraphState) -> GraphState:
+        """
+        Evaluate the code execution results and determine whether to finish or retry.
+
+        Args:
+            state (dict): The current graph state
+
+        Returns:
+            state (dict): Updated state with decision to finish or retry
+        """
+
+        pass
