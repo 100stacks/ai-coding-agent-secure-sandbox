@@ -199,4 +199,48 @@ Here is the user question:
             state (dict): New key added to state, error
         """
 
-        pass
+        ## State
+        print("---CHECKING CODE IMPORTS---")
+        state_dict = state["keys"]
+        question = state_dict["question"]
+        code_solution = state_dict["generation"]
+        imports = code_solution[0].imports
+        iter = state_dict["iterations"]
+
+        # Attempt to execute the imports
+        output, error = self.run(imports, self.sb)
+
+        if error:
+            print("---CODE IMPORT CHECK: FAILED ⚠️⛔️ ---")
+
+            # Catch any error during execution (e.g., ImportError, SyntaxError)
+            error = f"Execution error: {error}"
+            print(f"Error: {error}", file=sys.stderr)
+
+            if "error" in state_dict:
+                error_prev_runs = state_dict["error"]
+
+                # Error Output prompt to send to Agent
+                error = f"""
+{error_prev_runs}
+
+--- Most recent run output and error ---
+------ output ------
+{output}
+------ error ------
+{error}
+"""
+        else:
+            print("---CODE IMPORT CHECK: SUCCESS ✅---")
+
+            # No error occurred
+            error = "None"
+
+        return {
+            "keys": {
+                "generation": code_solution,
+                "question": question,
+                "error": error,
+                "iterations": iter,
+            }
+        }
