@@ -375,3 +375,20 @@ Provide a brief explanation for your decision.
                 "evaluation": evaluation[0],
             }
         }
+
+    def finish(self, state: GraphState) -> GraphState:
+        """
+        Finish the graph
+
+        Returns:
+            dict: Final result
+        """
+
+        ## State
+        print("---FINISHING---")
+
+        response = extract_response(state)
+
+        self.sb.terminate()
+
+        return {"keys": {"response": response}}
