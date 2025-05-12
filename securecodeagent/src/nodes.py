@@ -256,4 +256,43 @@ Here is the user question:
             state (dict): New key added to state error
         """
 
-        pass
+        ## State
+        print("---CHECKING CODE EXECUTION---")
+        state_dict = state["keys"]
+        question = state_dict["question"]
+        code_solution = state_dict["generation"]
+        imports = code_solution[0].imports
+        code = code_solution[0].code
+        code_block = imports + "\n" + code
+        iter = state_dict["iterations"]
+
+        output, error = self.run(code_block, self.sb)
+
+        if error:
+            print("---CODE BLOCK CHECK: FAILED ⚠️⛔️")
+            error = f"Execution error: {error}"
+            print(f"Error: {error}", file=sys.stderr)
+
+            if "error" in state_dict:
+                error_prev_runs = state_dict["error"]
+                error = (
+                    error_prev_runs
+                    + "\n --- Most recent run output and error --- \n"
+                    + "\n ------ output ------ \n"
+                    + output
+                    + "\n ------ error ------ \n"
+                    + error
+                )
+        else:
+            print("---CODE BLOCK CHECK: SUCCESS ✅---")
+            error = "None"  # No errors occured
+
+        return {
+            "keys": {
+                "generation": code_solution,
+                "question": question,
+                "error": error,
+                "output": output,
+                "iterations": iter,
+            }
+        }
