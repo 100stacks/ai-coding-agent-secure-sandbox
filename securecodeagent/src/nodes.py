@@ -308,4 +308,25 @@ Here is the user question:
             state (dict): Updated state with decision to finish or retry
         """
 
-        pass
+        ## State
+        print("---EVALUATING EXECUTION---")
+
+        state_dict = state["keys"]
+        output = state_dict["output"]
+        error = state_dict["error"]
+
+        code_solution = state_dict["generation"][0]
+        code = code_solution.code
+
+        class Decision(str, Enum):
+            FINISH = "finish"
+            RETRY = "retry"
+
+        class ExecutionEvaluation(BaseModel):
+            """
+            Evaluation of code execution
+            """
+
+            decision: Decision = Field(description="Decision to finish or retry")
+            explanation: str = Field(description="Explanation of the decision")
+
