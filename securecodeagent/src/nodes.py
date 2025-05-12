@@ -330,3 +330,48 @@ Here is the user question:
             decision: Decision = Field(description="Decision to finish or retry")
             explanation: str = Field(description="Explanation of the decision")
 
+        llm = ChatOpenAI(temperature=0.1, model=self.model)
+        evaluation_tool = convert_to_openai_tool(ExecutionEvaluation)
+        llm_with_tool = llm.bind(
+            tools=[evaluation_tool],
+            tool_choice={
+                "type": "function",
+                "function": {"name": "ExecutionEvaluation"},
+            },
+        )
+        parser_tool = PydanticToolsParser(tools=[ExecutionEvaluation])
+
+        ## Agent's code execution prompt
+        template = """
+You are an expert code evaluator. Analyze the following code execution results and determine
+if the execution was successful.
+
+Code:
+{code}
+
+Output:
+{output}
+
+Error:
+{error}
+
+Decide whether to finish (if the execution was successful) or retry (if there are errors or
+unexpected results).
+Provide a brief explanation for your decision.
+""".strip()
+
+        prompt = PromptTemplate(
+            template=template,
+            input_variables=["code", "output", "error"],
+        )
+
+        chain = prompt | llm_with_tool | parser_tool
+
+        evaluation = chain.invoke({"code": code, "output": output, "error": error})
+
+        return {
+            "keys": {
+                **state_dict,
+                "evaluation": evaluation[0],
+            }
+        }
