@@ -101,15 +101,15 @@ Here is the user question again:
 {question}
 """
 
-    ## Generation
-    if "error" in state_dict:
-        print("---RE-GENERATE SOLUTION with ERROR FEEDBACK---")
+        ## Generation
+        if "error" in state_dict:
+            print("---RE-GENERATE SOLUTION with ERROR FEEDBACK---")
 
-        error = state_dict["error"]
-        code_solution = state_dict["generation"]
+            error = state_dict["error"]
+            code_solution = state_dict["generation"]
 
-        # Update prompt
-        addendum = """You previously tried to solve this problem.  Here is your solution:
+            # Update prompt
+            addendum = """You previously tried to solve this problem.  Here is your solution:
 
 {generation}
 
