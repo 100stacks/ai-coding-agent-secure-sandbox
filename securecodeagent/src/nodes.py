@@ -126,5 +126,65 @@ Here is the user question:
 
 {question}
 """
-        ## Prompt
-        template = template + addendum
+            ## Prompt
+            template = template + addendum
+
+            # Prompt
+            prompt = PromptTemplate(
+                template=template,
+                input_variables=["context", "question", "generation", "error"],
+            )
+
+            # Chain
+            chain = (
+                {
+                    "context": lambda _: self.context,
+                    "question": itemgetter("question"),
+                    "generation": itemgetter("generation"),
+                    "error": itemgetter("error"),
+                }
+                | prompt
+                | llm_with_tool
+                | parser_tool
+            )
+
+            code_solution = chain.invoke(
+                {
+                    "question": question,
+                    "generation": str(code_solution[0]),
+                    "error": error,
+                }
+            )
+
+        else:
+            print("---GENERATE SOLUTION---")
+
+            # Prompt
+            prompt = PromptTemplate(
+                template=template,
+                input_variables=["context", "question"]
+            )
+
+            # Chain
+            chain = (
+                {
+                    "context": lambda _: self.context,
+                    "question": itemgetter("question"),
+                }
+                | prompt
+                | llm_with_tool
+                | parser_tool
+            )
+
+            code_solution = chain.invoke({"question": question})
+
+            iter = iter + 1
+
+            return {
+                "keys": {
+                    "generation": code_solution,
+                    "question": question,
+                    "iterations": iter,
+                }
+            }
+
