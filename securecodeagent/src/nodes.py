@@ -392,3 +392,33 @@ Provide a brief explanation for your decision.
         self.sb.terminate()
 
         return {"keys": {"response": response}}
+
+def extract_response(state: GraphState) -> str:
+    """
+    Extract Agent's response from the graph state
+
+    Args:
+        state (dict): The current graph state
+
+    Returns:
+        str: The response
+    """
+
+    state_dict = state["keys"]
+    code_solution = state_dict["generation"][0]
+
+    ## Agent response
+    prefix = code_solution.prefix
+    imports = code_solution.imports
+    code = code_solution.code
+
+    code_output = state_dict["output"]
+
+    return f"""{prefix}
+
+{imports}
+{code}
+
+Result of code execution:
+{code_output}
+"""
