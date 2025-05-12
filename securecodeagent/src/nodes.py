@@ -188,3 +188,15 @@ Here is the user question:
                 }
             }
 
+    def check_code_imports(self, state: GraphState) -> GraphState:
+        """
+        Check imports
+
+        Args:
+            state (dict): The current graph state
+
+        Returns:
+            state (dict): New key added to state, error
+        """
+
+        pass
