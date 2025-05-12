@@ -69,7 +69,7 @@ def construct_graph(sandbox: modal.Sandbox, debug: bool = False):
     Using LangGraph, construct the agent's graph.  The graph is defined in `edges`
     and `nodes` modules.
 
-    - `Nodes`: actions that change the state
+    - `Nodes`: actions that change the agent's state
     - `Edges`: transitions between nodes
     """
 
