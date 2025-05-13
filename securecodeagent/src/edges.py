@@ -6,7 +6,7 @@ from .common import GraphState
 
 EXPECTED_NODES = [
     "generate",
-    "check_node_imports",
+    "check_code_imports",
     "check_code_execution",
     "finish",
 ]
@@ -28,7 +28,7 @@ def enrich(graph):
     )
     graph.add_edge("check_code_execution", "evalute_execution")
     graph.add_conditional_edges(
-        "evaluation_execution",
+        "evaluate_execution",
         EDGE_MAP["decide_to_finish"],
         {
             "finish": "finish",

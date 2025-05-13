@@ -5,7 +5,7 @@ from .src.common import COLOR, PYTHON_VERSION, image
 
 app = modal.App(
     "secure-code-exec-agent",
-    image=imagem
+    image=image,
     secrets=[
         modal.Secret.from_name("openai-secret", required_keys=["OPENAI_API_KEY"]),
         modal.Secret.from_name("langsmith-secret", required_keys=["LANGCHAIN_API_KEY"]),
@@ -28,7 +28,7 @@ def create_sandbox(app) -> modal.Sandbox:
 
     return modal.Sandbox.create(
         image=agent_image,
-        timeout=60 * 10     # 10 min @ .59/hour  30 days ... would  equal $424! 😳
+        timeout=60 * 10,    # 10 min default. Running @ .59/hour  30 days ... would  equal $424! 😳
         app=app,
         gpu="T4",           # TODO: cycle different GPUs
         # if needed, pass secrets for sandbox usage here
@@ -79,11 +79,14 @@ def construct_graph(sandbox: modal.Sandbox, debug: bool = False):
 
     # Crawl the transformers documentation to inform code generation
     context = retrieval.retrieve_docs(debug=debug)
+    print("==== agent.py - context ====")
+    print(context)
 
     graph = StateGraph(GraphState)
-
+    print("==== agent.py - graph ====")
+    print(graph)
     # Attach nodes to the graph
-    graph_nodes = nodes.Nodes(context, sandbox, run, debug=dubug)
+    graph_nodes = nodes.Nodes(context, sandbox, run, debug=debug)
     for key, value in graph_nodes.node_map.items():
         graph.add_node(key, value)
 

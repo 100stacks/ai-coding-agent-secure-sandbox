@@ -14,7 +14,7 @@ def retrieve_docs(url: str=docs_url, debug=False):
     print(f"{COLOR['HEADER']}📜: Retrieving documents from {url}{COLOR['ENDC']}")
     loader = RecursiveUrlLoader(
         url=docs_url,
-        max_depth=2 // (int(debug) + 1)  # retrieve fewer docs in debug mode
+        max_depth=2 // (int(debug) + 1),  # retrieve fewer docs in debug mode
         extractor=lambda x: Soup(x, "html.parser").text,
     )
     docs = loader.load()

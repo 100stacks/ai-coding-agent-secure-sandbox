@@ -3,7 +3,7 @@
 import os
 from typing import Any, Dict, TypedDict
 
-import Modal
+import modal
 
 PYTHON_VERSION = "3.11"
 
@@ -13,7 +13,7 @@ image = (
         "beautifulsoup4~=4.12.3",
         "langchain==0.3.4",
         "langchain-core==0.3.12",
-        "langgraph==0.2.39",
+        "langgraph==0.2.40",
         "langchain-community==0.3.3",
         "langchain-openai==0.2.3",
         "pydantic==2.9.1",
@@ -31,7 +31,7 @@ class GraphState(TypedDict):
 
     keys: Dict[str, Any]
 
-os.environ["LANGCHAIN_PROJECT"] = "aicodingagent"
+os.environ["LANGCHAIN_PROJECT"] = "modal-ai-coding-agent-secure-sandbox"
 os.environ["LANGCHAIN_TRACING"] = "true"
 
 COLOR = {
