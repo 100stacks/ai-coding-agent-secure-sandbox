@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AI Coding Agent | Secure Sandbox</title>
+    <style>
+      body,
+      html {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        background: #f3f4f6;
+        /* display: flex; */
+        /* align-items: center; */
+        /* justify-content: center; */
+      }
+
+      .container {
+        position: relative;
+        width: 90%;
+        max-width: 80%;
+        height: 80vh;
+        border-radius: 1rem;
+        overflow: hidden;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        background: #fff;
+      }
+
+      iframe {
+        width: 100%;
+        height: 100%;
+        border: 2x dashed;
+      }
+
+      .loader {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 10;
+      }
+
+      .spinner {
+        width: 48px;
+        height: 48px;
+        border: 4px solid #3b82f6;
+        border-top: 4px solid transparent;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+      }
+
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="loader" id="loader">
+        <div class="spinner"></div>
+      </div>
+      <iframe
+        id="secure-sandbox"
+        src="https://100stacks--ai-coding-agent-secure-sandbox-serve-dev.modal.run"
+        title="AI Conding Agent Secure Sandbox"
+        allowfullscreen
+      ></iframe>
+    </div>
+
+    <script>
+      const iframe = document.getElementById("secure-sandbox");
+      const loader = document.getElementById("loader");
+
+      iframe.addEventListener("load", () => {
+        loader.style.display = "none";
+      });
+    </script>
+  </body>
+</html>
