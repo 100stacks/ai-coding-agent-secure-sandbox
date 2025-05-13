@@ -1,6 +1,11 @@
 from .common import COLOR
 
-docs_url = "https://huggingface.co/docs/transformers/index"
+hf_url = "https://huggingface.co/docs/transformers/index"
+# docs_url = "https://langchain-ai.github.io/langgraph/concepts/why-langgraph/"
+anthropic_url = "https://www.anthropic.com/engineering/building-effective-agents"
+langchain_lcel_url = "https://python.langchain.com/docs/concepts/lcel/"
+agents_url = "https://huyenchip.com/2025/01/07/agents.html"
+docs_url = hf_url
 
 def retrieve_docs(url: str=docs_url, debug=False):
     """

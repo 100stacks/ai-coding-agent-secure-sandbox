@@ -285,6 +285,8 @@ Here is the user question:
                 )
         else:
             print("---CODE BLOCK CHECK: SUCCESS ✅---")
+            print('---CODE RESULTS---')
+            print(output)
             error = "None"  # No errors occured
 
         return {

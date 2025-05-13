@@ -26,7 +26,7 @@ def enrich(graph):
             "generate": "generate",
         },
     )
-    graph.add_edge("check_code_execution", "evalute_execution")
+    graph.add_edge("check_code_execution", "evaluate_execution")
     graph.add_conditional_edges(
         "evaluate_execution",
         EDGE_MAP["decide_to_finish"],

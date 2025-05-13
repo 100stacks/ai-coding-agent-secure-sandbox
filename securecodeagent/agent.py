@@ -44,7 +44,7 @@ def run(code: str, sb: modal.Sandbox) -> tuple[str, str]:
     """
     print(
         f"{COLOR['HEADER']}📦: Running in sandbox{COLOR['ENDC']}",
-        f"(COLOR['GREEN']){code}{COLOR['ENDC']}",
+        f"{COLOR['GREEN']}\n{code}{COLOR['ENDC']}",
         sep="\n",
     )
 
