@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AI Coding Agent | Secure Sandbox</title>
+    <style>
+      /* CSS Reset and Base Styles */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont,
+          "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+        line-height: 1.7;
+        color: #111827;
+        background-color: #fafafa;
+        min-height: 100vh;
+        padding: 0;
+        margin: 0;
+        overflow-x: hidden;
+      }
+
+      /* Modern Variable Font */
+      @import url("https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap");
+
+      /* Loader Styles */
+      .loader-container {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: #ffffff;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 1000;
+        transition: opacity 0.5s ease-out;
+      }
+
+      .loader {
+        width: 48px;
+        height: 48px;
+        border: 3px solid rgba(121, 40, 202, 0.1);
+        border-radius: 50%;
+        border-top: 3px solid #7928ca;
+        border-right: 3px solid #7928ca;
+        animation: spin 0.8s cubic-bezier(0.68, -0.55, 0.27, 1.55) infinite;
+        box-shadow: 0 4px 16px rgba(121, 40, 202, 0.15);
+      }
+
+      .fade-out {
+        opacity: 0;
+        pointer-events: none;
+      }
+
+      @keyframes spin {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+
+      /* Header Styles */
+      header {
+        background: linear-gradient(135deg, #7928ca 0%, #ff0080 100%);
+        color: white;
+        padding: 3rem 0;
+        position: relative;
+        overflow: hidden;
+      }
+
+      header::before {
+        content: "";
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: radial-gradient(
+          circle,
+          rgba(255, 255, 255, 0.08) 0%,
+          rgba(255, 255, 255, 0) 60%
+        );
+        pointer-events: none;
+      }
+
+      .header-content {
+        max-width: 1140px;
+        margin: 0 auto;
+        padding: 0 2rem;
+        text-align: center;
+        position: relative;
+        z-index: 1;
+      }
+
+      h1 {
+        font-size: 3rem;
+        margin-bottom: 1.2rem;
+        font-weight: 800;
+        letter-spacing: -0.025em;
+        line-height: 1.2;
+      }
+
+      .subtitle {
+        font-size: 1.25rem;
+        font-weight: 400;
+        opacity: 0.9;
+        max-width: 600px;
+        margin: 0 auto 2rem;
+      }
+
+      /* Nav Styles */
+      nav {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        max-width: 1140px;
+        margin: 0 auto 3rem;
+        padding: 0 2rem;
+      }
+
+      .logo {
+        font-weight: 800;
+        font-size: 1.5rem;
+        text-decoration: none;
+        color: white;
+        display: flex;
+        align-items: center;
+      }
+
+      .logo::before {
+        content: "";
+        display: inline-block;
+        width: 10px;
+        height: 10px;
+        background: #fff;
+        border-radius: 50%;
+        margin-right: 10px;
+        box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.3);
+      }
+
+      /* CTA Button */
+      .cta-button {
+        display: inline-block;
+        background: white;
+        color: #7928ca;
+        font-weight: 600;
+        padding: 0.8rem 2rem;
+        border-radius: 50px;
+        text-decoration: none;
+        box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15);
+        transition: all 0.3s ease;
+        border: none;
+        cursor: pointer;
+        font-size: 1rem;
+      }
+
+      .cta-button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+      }
+
+      /* Main Content Styles */
+      .container {
+        max-width: 1140px;
+        margin: 0 auto;
+        padding: 4rem 2rem;
+      }
+
+      .card {
+        background-color: white;
+        border-radius: 16px;
+        overflow: hidden;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
+        margin-bottom: 3rem;
+        border: 1px solid rgba(0, 0, 0, 0.04);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+      }
+
+      .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.08);
+      }
+
+      .card-header {
+        background-color: #f9fafb;
+        padding: 1.5rem;
+        border-bottom: 1px solid #f3f4f6;
+        display: flex;
+        align-items: center;
+      }
+
+      .card-header h2 {
+        margin: 0;
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #111827;
+      }
+
+      .card-header h2::before {
+        content: "";
+        display: inline-block;
+        width: 8px;
+        height: 24px;
+        background: linear-gradient(to bottom, #7928ca, #ff0080);
+        border-radius: 4px;
+        margin-right: 12px;
+        vertical-align: text-top;
+      }
+
+      .card-body {
+        padding: 1.75rem;
+      }
+
+      /* Iframe Container */
+      .secure-sandbox {
+        position: relative;
+        overflow: hidden;
+        padding-top: 56.25%; /* 16:9 Aspect Ratio */
+        height: 0;
+        background-color: #f9fafb;
+        border-radius: 10px;
+        box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.05);
+        margin-top: 1rem;
+      }
+
+      .secure-sandbox iframe {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        border: 0;
+        border-radius: 10px;
+      }
+
+      /* Features List */
+      .features-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+      }
+
+      .features-list li {
+        padding: 0.75rem 0;
+        position: relative;
+        padding-left: 2rem;
+        border-bottom: 1px solid #f3f4f6;
+      }
+
+      .features-list li:last-child {
+        border-bottom: none;
+      }
+
+      .features-list li::before {
+        content: "✓";
+        position: absolute;
+        left: 0;
+        color: #7928ca;
+        font-weight: bold;
+        background: rgba(121, 40, 202, 0.1);
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.8rem;
+      }
+
+      /* Footer Styles */
+      footer {
+        background-color: #111827;
+        color: white;
+        padding: 4rem 0 2rem;
+        margin-top: 4rem;
+        position: relative;
+        overflow: hidden;
+      }
+
+      footer::after {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 4px;
+        background: linear-gradient(to right, #7928ca, #ff0080);
+      }
+
+      .footer-content {
+        max-width: 1140px;
+        margin: 0 auto;
+        padding: 0 2rem;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+      }
+
+      .footer-section {
+        flex: 1;
+        min-width: 200px;
+        margin-bottom: 2rem;
+        padding-right: 2rem;
+      }
+
+      .footer-section h3 {
+        margin-bottom: 1.5rem;
+        font-size: 1.25rem;
+        font-weight: 600;
+        color: white;
+      }
+
+      .footer-links {
+        list-style: none;
+      }
+
+      .footer-links li {
+        margin-bottom: 0.75rem;
+      }
+
+      .footer-links a {
+        color: #d1d5db;
+        text-decoration: none;
+        transition: color 0.2s ease;
+        position: relative;
+        padding-left: 0.5rem;
+      }
+
+      .footer-links a::before {
+        /* content: "→  "; */
+        position: absolute;
+        left: 0;
+        opacity: 0;
+        transform: translateX(-5px);
+        transition: all 0.2s ease;
+      }
+
+      .footer-links a:hover {
+        color: white;
+      }
+
+      .footer-links a:hover::before {
+        opacity: 1;
+        transform: translateX(0);
+      }
+
+      .copyright {
+        text-align: center;
+        width: 100%;
+        margin-top: 3rem;
+        padding-top: 1.5rem;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        font-size: 0.9rem;
+        color: #9ca3af;
+      }
+
+      /* Media Queries for Responsive Design */
+      @media (max-width: 768px) {
+        h1 {
+          font-size: 2.25rem;
+        }
+
+        .subtitle {
+          font-size: 1.1rem;
+        }
+
+        .footer-section {
+          flex: 0 0 100%;
+          padding-right: 0;
+        }
+
+        nav {
+          margin-bottom: 2rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Loader -->
+    <div class="loader-container">
+      <div class="loader"></div>
+    </div>
+
+    <!-- Header -->
+    <header>
+      <div class="header-content">
+        <h1>AI Coding Agent</h1>
+        <p class="subtitle">
+          Ask AI to build anything in a secure isolated sandbox environment.
+        </p>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container">
+      <div class="card">
+        <div class="card-header">
+          <h2>Sample prompts</h2>
+        </div>
+        <div class="card-body">
+          <ul class="features-list">
+            <li>
+              Build a work productivity tool to help me save time in my day.
+            </li>
+            <li>
+              Build me a stock tracker application with buy/sell recommendations
+              and company stock sentiment analysis.
+            </li>
+            <li>
+              Ask the agent to solve any LeetCode challenge -
+              <a href="https://leetcode.com/problemset/" target="_blank"
+                >LeetCode</a
+              >
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header">
+          <h2>Secure Sandbox</h2>
+        </div>
+        <div class="card-body">
+          <p>
+            Enter your prompt below. Then click <code>Start</code>. Toggle
+            <code>Intermediate steps</code> to see the agent "thinking".
+          </p>
+          <div class="secure-sandbox">
+            <iframe
+              src="https://100stacks--ai-coding-agent-secure-sandbox-serve.modal.run"
+              allow="fullscreen"
+            ></iframe>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header">
+          <h2>Key Features</h2>
+        </div>
+        <div class="card-body">
+          <ul class="features-list">
+            <li>
+              AI Coding Agent is run in an isolated sandbox. Feel free to ask
+              the agent to build anything.
+            </li>
+            <li>
+              There are built-in safety guardrails to prevent destructive
+              actions.
+            </li>
+            <li>Real-Time see the agent <i>"thinking"</i>.</li>
+            <li>Advanced analytics dashboard with customizable metrics.</li>
+            <li>Proof of Concept showing possible cybersecurity analysis.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <h2>Real-Time AI Agent Logging and Analysis</h2>
+        </div>
+        <div class="card-body" style="margin: auto">
+          <p>
+            Since this is a secure isolated sandbox, access to the above
+            analysis and logging has to be configured in the backend. Please
+            click the link below to see a sample AI Agent analysis of a previous
+            run.
+          </p>
+          <br />
+          <a
+            href="https://smith.langchain.com/public/ec157737-8a46-4fcc-aba3-30347ed647c9/r"
+            target="_blank"
+            class="cta-button"
+            style="margin: auto; display: flex; justify-content: center"
+            >View sample Real-Time Analysis</a
+          >
+        </div>
+      </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+      <div class="footer-content">
+        <div class="footer-section">
+          <ul class="footer-links">
+            <li>
+              <a href="https://aiengineer.work" target="_blank">About</a
+              >&nbsp;&nbsp;&nbsp;|
+              <a href="https://aiengineer.work/projects/" target="_blank"
+                >Projects</a
+              >
+            </li>
+          </ul>
+        </div>
+        <div class="copyright">&copy; 2025 James Thompson. MIT License.</div>
+      </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+      // Function to hide loader when page is fully loaded
+      window.addEventListener("load", function () {
+        // Get the loader element
+        const loader = document.querySelector(".loader-container");
+
+        // Add a small delay for better UX
+        setTimeout(function () {
+          // Add fade-out class to the loader
+          loader.classList.add("fade-out");
+
+          // Remove the loader from DOM after animation completes
+          setTimeout(function () {
+            loader.style.display = "none";
+          }, 500);
+        }, 800);
+      });
+    </script>
+  </body>
+</html>
