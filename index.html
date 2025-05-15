@@ -401,7 +401,7 @@
     <div class="loader-container">
       <div class="loader-message">
         <p>Please wait a few seconds while the secure sandbox loads.</p>
-        <p>If it doesn't load, please refresh the page.</p>
+        <p>If it doesn't load in 8 seconds, please refresh the page.</p>
       </div>
       <div class="loader"></div>
     </div>
@@ -420,12 +420,17 @@
     <main class="container">
       <div class="card">
         <div class="card-header">
-          <h2>Sample prompts</h2>
+          <h2>Sample starter prompts</h2>
         </div>
         <div class="card-body">
           <ul class="features-list">
             <li>
-              Build a work productivity tool to help me save time in my day.
+              Build an agent that helps summarize emails for me. Provide 3 email
+              samples and their summaries.
+            </li>
+            <li>
+              Write and run a Python script that counts the number of words in a
+              given text string. Provide 5 random examples and their output.
             </li>
             <li>
               Build me a stock tracker application with buy/sell recommendations
@@ -437,6 +442,13 @@
                 >LeetCode</a
               >
             </li>
+            <li>
+              <b>
+                NOTE: AI Coding Agent does not have access to external
+                tools/APIs, though it will try to use them. This was intentional
+                to add <i>guardrails</i> to its actions.
+              </b>
+            </li>
           </ul>
         </div>
       </div>
@@ -446,8 +458,9 @@
         </div>
         <div class="card-body">
           <p>
-            Enter your prompt below. Then click <code>Start</code>. Toggle
-            <code>Intermediate steps</code> to see the agent "thinking".
+            Enter your prompt below. Then click <b><code>Start</code></b
+            >. Toggle <b><code>Intermediate steps</code></b> to see the agent
+            "thinking".
           </p>
           <div class="secure-sandbox">
             <iframe
@@ -471,9 +484,15 @@
               There are built-in safety guardrails to prevent destructive
               actions.
             </li>
-            <li>Real-Time see the agent <i>"thinking"</i>.</li>
+            <li>
+              Real-Time: select <code>Intermediate steps</code> in the secure
+              sandbox to see the agent <i>"thinking"</i>.
+            </li>
             <li>Advanced analytics dashboard with customizable metrics.</li>
-            <li>Proof of Concept showing possible cybersecurity analysis.</li>
+            <li>
+              Proof of Concept showing possible cybersecurity analysis among
+              many other use cases (e.g., A/B testing, Evals, CI/CD).
+            </li>
           </ul>
         </div>
       </div>
