@@ -3,3 +3,11 @@
 # AI Coding Agent Secure Sandbox
 
 This is a proof of concept for running arbitrary code in an isolated secure environment.
+
+## Key Features
+
+- AI Coding Agent is run in an isolated sandbox. Feel free to ask the agent to build anything.
+- There are built-in safety guardrails to prevent destructive actions.
+- Real-Time see the agent "thinking".
+- Advanced analytics dashboard with customizable metrics.
+- Proof of Concept showing possible cybersecurity analysis.
