@@ -30,7 +30,8 @@ def create_sandbox(app) -> modal.Sandbox:
         image=agent_image,
         timeout=60 * 10,    # 10 min default. Running @ .59/hour  30 days ... would  equal $424! 😳
         app=app,
-        gpu="T4",           # TODO: cycle different GPUs
+        #gpu="T4",          # TODO: cycle different GPUs
+        gpu="A10G",         # runs @ $1.10/hr
         # if needed, pass secrets for sandbox usage here
     )
 
