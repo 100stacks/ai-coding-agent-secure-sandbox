@@ -117,13 +117,12 @@ def go(
     """
     sb = create_sandbox(app)
 
-    # LangChain LCEL syntax
+    # Build and invoke agent graph
     config = {"recursion_limit": 50}
     graph = construct_graph(sb, debug=debug, config=config)
     runnable = graph.compile()
     result = runnable.invoke(
         {"keys": {"question": question, "iterations": 0}},
-        # config={"recursion_limit": 50},
     )
 
     sb.terminate()
