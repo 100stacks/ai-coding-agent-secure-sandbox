@@ -30,8 +30,9 @@ def create_sandbox(app) -> modal.Sandbox:
         image=agent_image,
         timeout=60 * 10,    # 10 min default. Running @ .59/hour  30 days ... would  equal $424! 😳
         app=app,
-        #gpu="T4",          # TODO: cycle different GPUs
-        gpu="A10G",         # runs @ $1.10/hr
+        #gpu="T4",          # lowest baseline gpu
+        gpu="A10G",         # runs @ $1.10/hr - seems slightly unstable
+        # gpu="L4",           # runs @ $0.80/hr - slower upstart time
         # if needed, pass secrets for sandbox usage here
     )
 
@@ -116,12 +117,12 @@ def go(
     """
     sb = create_sandbox(app)
 
-    # LangChain LCEL syntax
-    graph = construct_graph(sb, debug=debug)
+    # Build and invoke agent graph
+    config = {"recursion_limit": 50}
+    graph = construct_graph(sb, debug=debug, config=config)
     runnable = graph.compile()
     result = runnable.invoke(
         {"keys": {"question": question, "iterations": 0}},
-        config={"recursion_limit": 50},
     )
 
     sb.terminate()
